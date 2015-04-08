@@ -1,12 +1,14 @@
 package com.iCo6.system;
 
 import com.iCo6.Constants;
+
 import org.bukkit.entity.Player;
 
 import com.iCo6.iConomy;
 import com.iCo6.util.Template;
 
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class Interest extends TimerTask {
         LinkedHashMap<String, HashMap<String, Object>> queries = new LinkedHashMap<String, HashMap<String, Object>>();
 
         if(Constants.Nodes.InterestOnline.getBoolean()) {
-            Player[] player = iConomy.Server.getOnlinePlayers();
+            Collection<? extends Player> player = iConomy.Server.getOnlinePlayers();
             
             for(Player p : player) {
                 players.add(p.getName());

@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Locale;
 
-import com.nijikokun.bukkit.Permissions.Permissions;
-
+//import com.nijikokun.bukkit.Permissions.Permissions;
 import com.iCo6.Constants.Drivers;
 import com.iCo6.command.Handler;
 import com.iCo6.command.Parser;
@@ -46,8 +45,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.h2.jdbcx.JdbcConnectionPool;
+
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
  * iConomy by Team iCo
@@ -75,7 +75,7 @@ public class iConomy extends JavaPlugin {
 
     private static Accounts Accounts = new Accounts();
     public Parser Commands = new Parser();
-    public Permissions Permissions;
+    public PermissionsEx Permissions;
     private boolean testedPermissions = false;
 
     public static File directory;
@@ -435,7 +435,7 @@ public class iConomy extends JavaPlugin {
                         
                         if (Perms != null) {
                             if (Perms.isEnabled()) {
-                                this.Permissions = ((Permissions)Perms);
+                                this.Permissions = ((PermissionsEx)Perms);
                                 System.out.println("[iConomy] hooked into Permissions.");
                             }
                         }
@@ -444,7 +444,7 @@ public class iConomy extends JavaPlugin {
                     }
                 
                 if(this.Permissions != null) {
-                    if(Permissions.Security.permission(player, node) || Permissions.Security.permission(player, node.toLowerCase()))
+                    if(player.hasPermission(node) || player.hasPermission(node.toLowerCase()))
                         return true;
 
                     return false;

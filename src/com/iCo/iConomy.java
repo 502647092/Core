@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Locale;
 
-import com.nijikokun.bukkit.Permissions.Permissions;
-
 import com.iCo.Constants.Drivers;
 import com.iCo.command.Handler;
 import com.iCo.command.Parser;
@@ -39,6 +37,7 @@ import java.util.Timer;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
@@ -48,10 +47,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 
+import ru.tehkode.permissions.bukkit.PermissionsEx;
+
 /**
- * iCo by Team iCo
+ * iConomy by Team iCo
  *
- * @copyright Copyright Nexua LLC (C) 2015
+ * @copyright Copyright AniGaiku LLC (C) 2010-2012
  * @author Nijikokun <nijikokun@gmail.com>
  * @author SpaceManiac
  *
@@ -74,7 +75,7 @@ public class iConomy extends JavaPlugin {
 
     private static Accounts Accounts = new Accounts();
     public Parser Commands = new Parser();
-    public Permissions Permissions;
+    public PermissionsEx Permissions;
     private boolean testedPermissions = false;
 
     public static boolean TerminalSupport = true;
@@ -138,62 +139,62 @@ public class iConomy extends JavaPlugin {
 
                 if(driver != null)
                     if(!(new File("lib", driver.getFilename()).exists())) {
-                        System.out.println("[iCo] Downloading " + driver.getFilename() + "...");
+                        System.out.println("[iConomy] Downloading " + driver.getFilename() + "...");
                         wget.fetch(driver.getUrl(), driver.getFilename());
-                        System.out.println("[iCo] Finished Downloading.");
+                        System.out.println("[iConomy] Finished Downloading.");
                     }
             }
 
             // Setup Commands
             Commands.add("/money +name", new Money(this));
-            Commands.setPermission("money", "iCo.holdings");
-            Commands.setPermission("money+", "iCo.holdings.others");
+            Commands.setPermission("money", "iConomy.holdings");
+            Commands.setPermission("money+", "iConomy.holdings.others");
             Commands.setHelp("money", new String[] { "", "Check your balance." });
             Commands.setHelp("money+", new String[] { " [name]", "Check others balance." });
 
             Commands.add("/money -h|?|help +command", new Help(this));
-            Commands.setPermission("help", "iCo.help");
+            Commands.setPermission("help", "iConomy.help");
             Commands.setHelp("help", new String[] { " (command)", "For Help & Information." });
 
             Commands.add("/money -t|top", new Top(this));
-            Commands.setPermission("top", "iCo.top");
+            Commands.setPermission("top", "iConomy.top");
             Commands.setHelp("top", new String[] { "", "View top economical accounts." });
 
             Commands.add("/money -p|pay +name +amount:empty", new Payment(this));
-            Commands.setPermission("pay", "iCo.payment");
+            Commands.setPermission("pay", "iConomy.payment");
             Commands.setHelp("pay", new String[] { " [name] [amount]", "Send money to others." });
 
             Commands.add("/money -c|create +name", new Create(this));
-            Commands.setPermission("create", "iCo.accounts.create");
+            Commands.setPermission("create", "iConomy.accounts.create");
             Commands.setHelp("create", new String[] { " [name]", "Create an account." });
 
             Commands.add("/money -r|remove +name", new Remove(this));
-            Commands.setPermission("remove", "iCo.accounts.remove");
+            Commands.setPermission("remove", "iConomy.accounts.remove");
             Commands.setHelp("remove", new String[] { " [name]", "Remove an account." });
 
             Commands.add("/money -g|give +name +amount:empty", new Give(this));
-            Commands.setPermission("give", "iCo.accounts.give");
+            Commands.setPermission("give", "iConomy.accounts.give");
             Commands.setHelp("give", new String[] { " [name] [amount]", "Give money." });
 
             Commands.add("/money -t|take +name +amount:empty", new Take(this));
-            Commands.setPermission("take", "iCo.accounts.take");
+            Commands.setPermission("take", "iConomy.accounts.take");
             Commands.setHelp("take", new String[] { " [name] [amount]", "Take money." });
 
             Commands.add("/money -s|set +name +amount:empty", new Set(this));
-            Commands.setPermission("set", "iCo.accounts.set");
+            Commands.setPermission("set", "iConomy.accounts.set");
             Commands.setHelp("set", new String[] { " [name] [amount]", "Set account balance." });
 
             Commands.add("/money -u|status +name +status:empty", new Status(this));
-            Commands.setPermission("status", "iCo.accounts.status");
-            Commands.setPermission("status+", "iCo.accounts.status.set");
+            Commands.setPermission("status", "iConomy.accounts.status");
+            Commands.setPermission("status+", "iConomy.accounts.status.set");
             Commands.setHelp("status", new String[] { " [name] (status)", "Check/Set account status." });
 
             Commands.add("/money -x|purge", new Purge(this));
-            Commands.setPermission("purge", "iCo.accounts.purge");
+            Commands.setPermission("purge", "iConomy.accounts.purge");
             Commands.setHelp("purge", new String[] { "", "Purge all accounts with initial holdings." });
 
             Commands.add("/money -e|empty", new Empty(this));
-            Commands.setPermission("empty", "iCo.accounts.empty");
+            Commands.setPermission("empty", "iConomy.accounts.empty");
             Commands.setHelp("empty", new String[] { "", "Empty database of accounts." });
 
             // Setup Database.
@@ -219,12 +220,12 @@ public class iConomy extends JavaPlugin {
                             try{
                                 run.update(c, SQL);
                             } catch (SQLException ex) {
-                                System.out.println("[iCo] Error creating database: " + ex);
+                                System.out.println("[iConomy] Error creating database: " + ex);
                             } finally {
                                 DbUtils.close(c);
                             }
                         } catch (SQLException ex) {
-                            System.out.println("[iCo] Database Error: " + ex);
+                            System.out.println("[iConomy] Database Error: " + ex);
                         }
                     }
                 } else {
@@ -374,15 +375,15 @@ public class iConomy extends JavaPlugin {
                             }
                         });
                     } catch (SQLException ex) {
-                        System.out.println("[iCo] Error issueing SQL query: " + ex);
+                        System.out.println("[iConomy] Error issueing SQL query: " + ex);
                     } finally {
                         DbUtils.close(old);
                     }
                 } catch (SQLException ex) {
-                    System.out.println("[iCo] Database Error: " + ex);
+                    System.out.println("[iConomy] Database Error: " + ex);
                 }
 
-                System.out.println("[iCo] Conversion complete. Please update your configuration, change convert to false!");
+                System.out.println("[iConomy] Conversion complete. Please update your configuration, change convert to false!");
             }
         });
 
@@ -420,7 +421,7 @@ public class iConomy extends JavaPlugin {
             Player player = (Player)sender;
 
             if(player == null) {
-                System.out.println("[iCo] Cannot execute command with false player");
+                System.out.println("[iConomy] Cannot execute command with false player");
                 return false;
             }
 
@@ -436,8 +437,8 @@ public class iConomy extends JavaPlugin {
                         
                         if (Perms != null) {
                             if (Perms.isEnabled()) {
-                                this.Permissions = ((Permissions)Perms);
-                                System.out.println("[iCo] hooked into Permissions.");
+                                this.Permissions = ((PermissionsEx)Perms);
+                                System.out.println("[iConomy] hooked into PermissionsEx.");
                             }
                         }
 
@@ -445,7 +446,7 @@ public class iConomy extends JavaPlugin {
                     }
                 
                 if(this.Permissions != null) {
-                    if(Permissions.Security.permission(player, node) || Permissions.Security.permission(player, node.toLowerCase()))
+                    if(player.hasPermission(node) || player.hasPermission(node.toLowerCase()))
                         return true;
 
                     return false;

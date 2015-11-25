@@ -7,7 +7,7 @@ version: 7.1
 commands:
     money:
       aliases: [iConomy, iCo]
-      description: Distrobute, Check, Use Currency.
+      description: Distribute, Check, Use Currency.
 
 # Generator Data
 generators: [bukget]

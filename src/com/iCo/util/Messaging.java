@@ -105,7 +105,7 @@ public class Messaging {
      * @return <code>String</code> - The parsed string after conversion.
      */
     public static String colorize(String string) {
-        if(iConomy.TerminalSupport)
+        if(iConomy.Server != null)
             if(!(sender instanceof Player))
                 string = string.replace("`r", "\033[1;31m")                  .replace("`R", "\033[0;31m")
                         .replace("`y", "\033[1;33m")                         .replace("`Y", "\033[0;33m")

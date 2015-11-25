@@ -1,12 +1,14 @@
 package com.iCo.system;
 
 import com.iCo.Constants;
+
 import org.bukkit.entity.Player;
 
 import com.iCo.iConomy;
 import com.iCo.util.Template;
 
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -44,7 +46,9 @@ public class Interest extends TimerTask {
                amount = 0.0;
         
         String table = Constants.Nodes.DatabaseTable.toString();
-        String query = "UPDATE " + table + " SET balance = ? WHERE username = ?";
+        String bal = Constants.Nodes.DatabaseColumnBalance.toString();
+        String u = Constants.Nodes.DatabaseColumnUsername.toString();
+        String query = "UPDATE " + table + " SET " + bal + " = ? WHERE " + u + " = ?";
 
         if(percentage == 0.0){
             try {
@@ -78,7 +82,7 @@ public class Interest extends TimerTask {
                 amount = Double.valueOf(DecimalFormat.format((percentage * balance)/100));
 
             data.put("original", balance);
-            data.put("balance", (balance + amount));
+            data.put(Constants.Nodes.DatabaseColumnBalance.toString(), (balance + amount));
             queries.put(name, data);
         }
 

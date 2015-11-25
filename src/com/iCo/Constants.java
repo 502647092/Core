@@ -64,8 +64,11 @@ public class Constants {
         InterestMax("System.Interest.Amount.Minimum", 2.0),
 
         DatabaseType("System.Database.Type", "MiniDB"),
-        DatabaseTable("System.Database.Table", "iCo"),
-        DatabaseUrl("System.Database.URL", "mysql:\\\\localhost:3306\\iCo"),
+        DatabaseTable("System.Database.Table", "iConomy"),
+        DatabaseColumnUsername("System.Database.UsernameColumn", "username"),
+        DatabaseColumnBalance("System.Database.BalanceColumn", "balance"),
+        DatabaseColumnStatus("System.Database.StatusColumn", "status"),
+        DatabaseUrl("System.Database.URL", "mysql:\\\\localhost:3306\\iConomy"),
         DatabaseUsername("System.Database.Username", "root"),
         DatabasePassword("System.Database.Password", ""),
         DatabaseMajorItem("System.Database.MajorItem", 266),
@@ -73,8 +76,8 @@ public class Constants {
 
         Convert("System.Database.Conversion.Enabled", false),
         ConvertFrom("System.Database.Conversion.Type", "H2DB"),
-        ConvertTable("System.Database.Conversion.Table", "iCo"),
-        ConvertURL("System.Database.Conversion.URL", "mysql:\\\\localhost:3306\\iCo"),
+        ConvertTable("System.Database.Conversion.Table", "iConomy"),
+        ConvertURL("System.Database.Conversion.URL", "mysql:\\\\localhost:3306\\iConomy"),
         ConvertUsername("System.Database.Conversion.Username", "root"),
         ConvertPassword("System.Database.Conversion.Password", ""),
         ConvertAll("System.Database.Conversion.All", true);
@@ -120,7 +123,8 @@ public class Constants {
             return (Long) value;
         }
 
-        public List<String> getStringList() {
+        @SuppressWarnings("unchecked")
+		public List<String> getStringList() {
             return (List<String>) value;
         }
 

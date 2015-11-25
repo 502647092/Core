@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
 import org.bukkit.entity.Player;
 
 /**
@@ -119,7 +122,7 @@ public class Queried {
                 accounts.addAll(inventory.getAllPlayers());
 
             if (useOrbDB())
-                for(Player p: iConomy.Server.getOnlinePlayers())
+                for(Player p : iConomy.Server.getOnlinePlayers())
                     accounts.add(p.getName());
 
             accounts.addAll(database.getIndices().keySet());
@@ -136,12 +139,12 @@ public class Queried {
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
                 accounts = run.query(c, "SELECT " + u + " FROM " + t, returnList);
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
 
         return accounts;
@@ -174,12 +177,12 @@ public class Queried {
                     String bal = Constants.Nodes.DatabaseColumnBalance.toString();
                     total = run.query(c, "SELECT " + u + " FROM " + t + " WHERE " + s + " <> 1 ORDER BY " + bal + " DESC LIMIT " + amount, returnList);
                 } catch (SQLException ex) {
-                    System.out.println("[iCo] Error issueing SQL query: " + ex);
+                    System.out.println("[iConomy] Error issueing SQL query: " + ex);
                 } finally {
                     DbUtils.close(c);
                 }
             } catch (SQLException ex) {
-                System.out.println("[iCo] Database Error: " + ex);
+                System.out.println("[iConomy] Database Error: " + ex);
             }
         }
 
@@ -239,7 +242,7 @@ public class Queried {
             QueryRunner run = new QueryRunner();
             Connection c = iConomy.Database.getConnection();
 
-            try{
+            try {
                 String t = Constants.Nodes.DatabaseTable.toString();
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
                 String s = Constants.Nodes.DatabaseColumnStatus.toString();
@@ -249,12 +252,12 @@ public class Queried {
                 if(amount > 0)
                     created = true;
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
 
         return false;
@@ -278,7 +281,7 @@ public class Queried {
             QueryRunner run = new QueryRunner();
             Connection c = iConomy.Database.getConnection();
 
-            try{
+            try {
                 String t = Constants.Nodes.DatabaseTable.toString();
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
                 Integer amount = run.update(c, "DELETE FROM " + t + " WHERE " + u + "=?", name.toLowerCase());
@@ -286,12 +289,12 @@ public class Queried {
                 if(amount > 0)
                     removed = true;
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
 
         return removed;
@@ -321,12 +324,12 @@ public class Queried {
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
                 exists = run.query(c, "SELECT id FROM " + t + " WHERE " +u+ "=?", returnBoolean, name.toLowerCase());
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
 
         return exists;
@@ -363,12 +366,12 @@ public class Queried {
                 String bal = Constants.Nodes.DatabaseColumnBalance.toString();
                 balance = run.query(c, "SELECT "+ bal +" FROM " + t + " WHERE "+ u +"=?", returnBalance, name.toLowerCase());
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
 
         return balance;
@@ -454,12 +457,12 @@ public class Queried {
                 String bal = Constants.Nodes.DatabaseColumnBalance.toString();
                 int update = run.update(c, "UPDATE " + t + " SET " + bal + "=? WHERE " + u + "=?", balance, name.toLowerCase());
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
     }
 
@@ -534,12 +537,12 @@ public class Queried {
                         try{
                             run.batch(c, query, parameters);
                         } catch (SQLException ex) {
-                            System.out.println("[iCo] Error with batching: " + ex);
+                            System.out.println("[iConomy] Error with batching: " + ex);
                         } finally {
                             DbUtils.close(c);
                         }
                     } catch (SQLException ex) {
-                        System.out.println("[iCo] Database Error: " + ex);
+                        System.out.println("[iConomy] Database Error: " + ex);
                     }
                 }
             });
@@ -577,12 +580,12 @@ public class Queried {
                         String bal = Constants.Nodes.DatabaseColumnBalance.toString();
                         Integer amount = run.update(c, "DELETE FROM " + t + " WHERE " + bal + "=?", Constants.Nodes.Balance.getDouble());
                     } catch (SQLException ex) {
-                        System.out.println("[iCo] Error issueing SQL query: " + ex);
+                        System.out.println("[iConomy] Error issueing SQL query: " + ex);
                     } finally {
                         DbUtils.close(c);
                     }
                 } catch (SQLException ex) {
-                    System.out.println("[iCo] Database Error: " + ex);
+                    System.out.println("[iConomy] Database Error: " + ex);
                 }
             }
         });
@@ -617,12 +620,12 @@ public class Queried {
                         String t = Constants.Nodes.DatabaseTable.toString();
                         Integer amount = run.update(c, "TRUNCATE TABLE " + t);
                     } catch (SQLException ex) {
-                        System.out.println("[iCo] Error issueing SQL query: " + ex);
+                        System.out.println("[iConomy] Error issueing SQL query: " + ex);
                     } finally {
                         DbUtils.close(c);
                     }
                 } catch (SQLException ex) {
-                    System.out.println("[iCo] Database Error: " + ex);
+                    System.out.println("[iConomy] Database Error: " + ex);
                 }
             }
         });
@@ -653,12 +656,12 @@ public class Queried {
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
                 status = run.query(c, "SELECT " + s + " FROM " + t + " WHERE " + u + "=?", returnStatus, name.toLowerCase());
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
 
         return status;
@@ -688,7 +691,7 @@ public class Queried {
             QueryRunner run = new QueryRunner();
             Connection c = iConomy.Database.getConnection();
 
-            try{
+            try {
                 String t = Constants.Nodes.DatabaseTable.toString();
                 String s = Constants.Nodes.DatabaseColumnStatus.toString();
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
@@ -733,12 +736,12 @@ public class Queried {
                 String u = Constants.Nodes.DatabaseColumnUsername.toString();
                 run.update(c, "UPDATE " + t + " SET " + s + "=? WHERE " + u + "=?", newName, name.toLowerCase());
             } catch (SQLException ex) {
-                System.out.println("[iCo] Error issueing SQL query: " + ex);
+                System.out.println("[iConomy] Error issueing SQL query: " + ex);
             } finally {
                 DbUtils.close(c);
             }
         } catch (SQLException ex) {
-            System.out.println("[iCo] Database Error: " + ex);
+            System.out.println("[iConomy] Database Error: " + ex);
         }
     }
 }

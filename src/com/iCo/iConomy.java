@@ -292,7 +292,6 @@ public class iConomy extends JavaPlugin {
                 Interest = null;
             }
             
-            TerminalSupport = false;
         } finally {
           endTime = System.nanoTime();
         }
